@@ -4,13 +4,14 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.CaveSpiderRenderer;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -18,6 +19,8 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -55,6 +58,7 @@ public class ChouHenMod
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
+        MinecraftForge.EVENT_BUS.register(ChouHenMod.class);
         // Some common setup code
         LOGGER.info("HELLO FROM COMMON SETUP");
 
@@ -137,5 +141,16 @@ public class ChouHenMod
             LOGGER.info("锁定目标");
         }
 
+    }
+    @SubscribeEvent
+    public static void onPlayerTick(PlayerTickEvent event)
+    {
+        Player player = event.player;
+        ItemStack itemstack = player.getItemBySlot(EquipmentSlot.HEAD);
+        if(itemstack.is(Items.DIAMOND_HELMET))
+        {
+            player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED,200,1,false,false,true));
+            LOGGER.info("添加效果");
+        }
     }
 }
