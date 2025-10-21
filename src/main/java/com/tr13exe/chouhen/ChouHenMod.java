@@ -2,11 +2,10 @@ package com.tr13exe.chouhen;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.CaveSpiderRenderer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.entity.monster.Skeleton;
-import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -105,7 +104,37 @@ public class ChouHenMod
                             zombie, Creeper.class,true
                     )
             );
-            LOGGER.info("僵尸锁定骷髅");
+            zombie.targetSelector.addGoal(
+                    3,
+                    new NearestAttackableTargetGoal<>(
+                            zombie, CaveSpider.class,true
+                    )
+            );
+            zombie.targetSelector.addGoal(
+                    3,
+                    new NearestAttackableTargetGoal<>(
+                            zombie, Spider.class,true
+                    )
+            );
+            zombie.targetSelector.addGoal(
+                    3,
+                    new NearestAttackableTargetGoal<>(
+                            zombie, Witch.class,true
+                    )
+            );
+            zombie.targetSelector.addGoal(
+                    3,
+                    new NearestAttackableTargetGoal<>(
+                            zombie, Pillager.class,true
+                    )
+            );
+            zombie.targetSelector.addGoal(
+                    3,
+                    new NearestAttackableTargetGoal<>(
+                            zombie, Vindicator.class,true
+                    )
+            );
+            LOGGER.info("锁定目标");
         }
 
     }
