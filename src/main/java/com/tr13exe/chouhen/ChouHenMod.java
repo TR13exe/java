@@ -10,6 +10,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
@@ -84,18 +87,11 @@ public class ChouHenMod
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
         }
     }
-    @SubscribeEvent
-    public static void onPlayerTick(PlayerTickEvent event)
-    {
-        Player player = event.player;
-        ItemStack itemstack = player.getItemBySlot(EquipmentSlot.HEAD);
-        if(itemstack.is(Items.DIAMOND_HELMET))
-        {
-            player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED,2,1,false,false,true));
-        }
-    }
-    private static final List<Class<? extends Monster>> BIAODAN = List.of(Zombie.class, Skeleton.class, Creeper.class, CaveSpider.class, Spider.class, Warden.class, Witch.class, Pillager.class, Vindicator.class, Evoker.class, Ravager.class);
+    private static final List<Class<? extends Monster>> BIAODAN = List.of(Zombie.class, Skeleton.class, Creeper.class, CaveSpider.class, Spider.class, Warden.class, Witch.class, Pillager.class, Vindicator.class, Evoker.class, Ravager.class, Blaze.class, Stray.class,
+            Drowned.class, Guardian.class, Husk.class, Piglin.class, PiglinBrute.class, ZombifiedPiglin.class, WitherSkeleton.class, ZombieVillager.class);
     private static final List<Class<? extends Raider>> XIJIZHE = List.of(Witch.class, Pillager.class, Vindicator.class, Evoker.class, Ravager.class);
+    private static final List<Class<? extends AbstractSkeleton>> KULOU = List.of(Stray.class, Skeleton.class, WitherSkeleton.class);
+    private static final List<Class<? extends Zombie>> JIANGSHI = List.of(Husk.class, Zombie.class, Drowned.class,ZombieVillager.class);
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinLevelEvent event)
     {
@@ -109,15 +105,29 @@ public class ChouHenMod
                 boolean isTargetInList = BIAODAN.contains(target.getClass());
                 boolean isTargetOfType = target.getClass()!=didui.getClass(); //判断攻击者和攻击目标是否是一个类，如果不是就能返回true
                 boolean isTargetOfType2 = XIJIZHE.contains(didui.getClass()) && XIJIZHE.contains(target.getClass());
-                return isTargetInList && isTargetOfType && !isTargetOfType2;
+                boolean isTargetOfType4 = KULOU.contains(didui.getClass()) && KULOU.contains(target.getClass());
+                boolean isTargetOfType5 = JIANGSHI.contains(didui.getClass()) && JIANGSHI.contains(target.getClass());
+                return isTargetInList && isTargetOfType && !isTargetOfType2 && !isTargetOfType4 && !isTargetOfType5;
             };
             gongji.targetSelector.addGoal(
-                    3,new NearestAttackableTargetGoal<>(
-                            gongji, Monster.class,10, true, false, guolu
+                            3,new NearestAttackableTargetGoal<>(
+                                    gongji, Monster.class,10, true, false, guolu
                     )
             );
         }
     }
+    /*
+    @SubscribeEvent
+    public static void onPlayerTick(PlayerTickEvent event)
+    {
+        Player player = event.player;
+        ItemStack itemstack = player.getItemBySlot(EquipmentSlot.HEAD);
+        if(itemstack.is(Items.DIAMOND_HELMET))
+        {
+            player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED,2,1,false,false,true));
+        }
+    }
+    */
     /*
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinLevelEvent event)

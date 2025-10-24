@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.tr13exe.chouhen.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "chouhen.refmap.json",
+  "mixins": ["ZhuLingAi","ZhuLingManBingAi"],
+  "client": [],
+  "injectors": {"defaultRequire": 1}
+}
